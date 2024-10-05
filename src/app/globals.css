@@ -9,3 +9,28 @@
 .special-text {
     font-family: 'Montserrat Alternates', sans-serif; /* Montserrat Alternates for specific text */
   }  
+
+  .special-text-monda{
+    
+      font-family: 'Monda', sans-serif;
+      color: #D8CFC8;;
+    }
+    
+
+
+input{
+  border-radius: 10px;
+  padding-left: 10px;
+  padding-right: 50px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  color: black;
+  outline-color: gray;
+  background-color: rgb(255, 238, 238);
+  border: none;
+  
+}  
+
+.account{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}

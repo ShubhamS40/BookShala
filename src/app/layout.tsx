@@ -26,8 +26,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-      <link
-          href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Montserrat+Alternates:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap"
+        <link
+          href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montserrat+Alternates:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+          rel="stylesheet"
+        />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap"
           rel="stylesheet"
         />
       </head>
