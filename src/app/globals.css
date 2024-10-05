@@ -2,3 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+.heading {
+    font-family: 'Alfa Slab One', cursive;
+  }
+
+.special-text {
+    font-family: 'Montserrat Alternates', sans-serif; /* Montserrat Alternates for specific text */
+  }  

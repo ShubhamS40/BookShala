@@ -1,15 +1,29 @@
-// src/app/api/fetchImages/route.ts
+import { supabase } from '@/lib/supabaseclient';
 import { NextResponse } from 'next/server';
-import { PrismaClient } from '@prisma/client';
 
-const prisma = new PrismaClient();
-
-export async function GET() {
+// Named export for the GET method
+export async function GET(req: Request) {
   try {
-    const images = await prisma.image.findMany(); // Fetch all images from the database
-    return NextResponse.json(images); // Return the images as JSON response
+    // Fetch the URLs from Supabase (replace 'BlogImage' with your actual table name)
+    const { data, error } = await supabase
+      .from('BlogImage') // Ensure this is the correct table name
+      .select('url');
+
+    // If there's an error, return 500 with the error message
+    if (error) {
+      console.error("Error fetching from Supabase:", error);
+      return NextResponse.json({ message: 'Failed to fetch image URLs', error }, { status: 500 });
+    }
+
+    // If no data is found, return an empty array
+    if (!data || data.length === 0) {
+      return NextResponse.json([], { status: 200 });
+    }
+
+    // Return the fetched data
+    return NextResponse.json(data, { status: 200 });
   } catch (error) {
-    console.error('Error fetching images:', error);
-    return NextResponse.json({ error: 'Failed to fetch images' }, { status: 500 });
+    console.error("Error in API handler:", error);
+    return NextResponse.json({ message: 'Internal Server Error', error }, { status: 500 });
   }
 }
