@@ -19,7 +19,8 @@
 
 
 input{
-  border-radius: 10px;
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
   padding-left: 10px;
   padding-right: 50px;
   padding-top: 3px;
@@ -30,6 +31,15 @@ input{
   border: none;
   
 }  
+.searchbar{
+  outline-color: gray;
+ 
+  padding-top: 8px;
+  padding-bottom: 8px;
+  background-color: rgb(255, 238, 238);
+
+}
+
 
 .account{
   font-family: Georgia, 'Times New Roman', Times, serif;
