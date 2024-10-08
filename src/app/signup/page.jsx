@@ -31,9 +31,9 @@ function Page() {
               <div className='font-bold flex space-x-4 text-2xl'>
                 <span>Already registered?</span>
                 <Link href={'login'}>
-                <span className='cursor-pointer text-yellow-300'>
-                  Login
-                </span>
+                  <span className='cursor-pointer text-yellow-300'>
+                    Login
+                  </span>
                 </Link>
               </div>
             </div>

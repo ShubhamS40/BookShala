@@ -42,6 +42,10 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Monda:wght@400..700&display=swap"
           rel="stylesheet"
         />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Montaga&display=swap"
+          rel="stylesheet"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
