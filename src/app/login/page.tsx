@@ -25,7 +25,10 @@ function Page() {
           <div>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold mb-4">Login</h1>
             <p className="text-base sm:text-lg md:text-xl font-light">
-              If you don't have an account, <br /> click on <Link href={'/signup'}><span className="font-bold text-yellow-300">Sign Up</span></Link>
+              If you don't have an account, <br /> click on{' '}
+              <Link href={'/signup'}>
+                <span className="font-bold text-yellow-300">Sign Up</span>
+              </Link>
             </p>
           </div>
         </div>
@@ -39,7 +42,10 @@ function Page() {
           {/* Form */}
           <form className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-base sm:text-lg font-medium text-gray-700">
+              <label
+                htmlFor="email"
+                className="block text-base sm:text-lg font-medium text-gray-700"
+              >
                 Email
               </label>
               <input
@@ -51,7 +57,10 @@ function Page() {
             </div>
 
             <div>
-              <label htmlFor="password" className="block text-base sm:text-lg font-medium text-gray-700">
+              <label
+                htmlFor="password"
+                className="block text-base sm:text-lg font-medium text-gray-700"
+              >
                 Password
               </label>
               <input
@@ -60,6 +69,15 @@ function Page() {
                 className="mt-1 w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#806044] focus:border-[#806044] text-gray-900"
                 placeholder="Enter your password"
               />
+            </div>
+
+            {/* Forgot Password Link */}
+            <div className="flex justify-end">
+              <Link href="/forgot-password">
+                <Link href={"/forgetpassword"} className="text-sm text-[#806044] font-semibold hover:underline">
+                  Forgot Password?
+                </Link>
+              </Link>
             </div>
 
             <div className="flex justify-center">

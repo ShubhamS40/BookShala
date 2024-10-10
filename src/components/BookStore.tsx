@@ -3,18 +3,21 @@ import Button from './Button'; // Import Button component
 import Chip from './Chip';
 import Image from 'next/image';
 import { IoIosSearch } from "react-icons/io";
+import Link from 'next/link';
 const BookStore = () => {
   return (
     <div className="p-4  min-h-screen" >
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         {/* Logo and Account */}
-        <div className="flex items-center space-x-4">
+       <Link href={"/userprofile"}>
+       <div className="flex items-center space-x-4">
           <div className="bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center">
             <span className="text-lg font-bold text-gray-600">SS</span>
           </div>
           <span className="text-xl font-semibold text-gray-500">My Account</span>
         </div>
+       </Link>
 
         {/* Search Bar */}
         <div className="flex items-center cursor-pointer ">
