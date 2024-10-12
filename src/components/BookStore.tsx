@@ -90,7 +90,7 @@ const BookStore = () => {
                 </div>
 
                 {/* Buy Now Button */}
-                <Button name="Buy Now" />
+               <Link href={"/product"}> <Button name="Buy Now" /></Link>
               </div>
             </div>
           ))}

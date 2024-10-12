@@ -10,7 +10,7 @@ function Navbar() {
     };
 
     return (
-        <div className='flex flex-col md:flex-row justify-between sticky  items-center bg-[#806044] backdrop-blur-md border-b border-gray-200 w-full min-h-[50px] p-4'>
+        <div className='flex flex-col md:flex-row justify-between    items-center bg-[#806044] backdrop-blur-md border-b border-gray-200 w-full min-h-[50px] p-4'>
             {/* Logo */}
             <div className='text-white text-2xl font-bold'>
                <Link href={"/welcome"}>
