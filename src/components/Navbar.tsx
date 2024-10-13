@@ -41,9 +41,11 @@ function Navbar() {
                     <li className='text-white hover:text-gray-300 cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:font-bold'>
                         Featured Author
                     </li>
-                    <li className='text-white hover:text-gray-300 cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:font-bold'>
+                  <Link href={'/about'}>
+                  <li className='text-white hover:text-gray-300 cursor-pointer transform transition-transform duration-200 hover:scale-105 hover:font-bold'>
                         About us
                     </li>
+                  </Link>
                 </ul>
 
                 <Link href={"/login"}>
