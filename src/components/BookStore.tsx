@@ -1,42 +1,57 @@
+'use client';
 import React from 'react';
 import Button from './Button'; // Import Button component
 import Chip from './Chip';
-import Image from 'next/image';
 import { IoIosSearch } from "react-icons/io";
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation for navigation
+
 const BookStore = () => {
+  const router = useRouter(); // Initialize router for navigation
+
+  // Function to handle the Buy Now button click
+  const handleBuyNow = () => {
+    const token = localStorage.getItem('token'); // Check if token exists in localStorage
+
+    if (token) {
+      router.push('/product'); // Navigate to /product if token exists
+    } else {
+      alert('Please login to continue'); // Show alert if no token is present
+    }
+  };
+
   return (
-    <div className="p-4  min-h-screen" >
+    <div className="p-4  min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         {/* Logo and Account */}
-       <Link href={"/userprofile"}>
-       <div className="flex items-center space-x-4">
-          <div className="bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center">
-            <span className="text-lg font-bold text-gray-600">SS</span>
+        <Link href={"/userprofile"}>
+          <div className="flex items-center space-x-4">
+            <div className="bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center">
+              <span className="text-lg font-bold text-gray-600">SS</span>
+            </div>
+            <span className="text-xl font-semibold text-gray-500">My Account</span>
           </div>
-          <span className="text-xl font-semibold text-gray-500">My Account</span>
-        </div>
-       </Link>
+        </Link>
 
         {/* Search Bar */}
-        <div className="flex items-center cursor-pointer ">
-  <input
-    type="text"
-    placeholder="Search a Book"
-    className="w-80 p-2 border border-gray-300   focus:ring focus:border-blue-300"
-  />
-  <span className="flex items-center searchbar  ">
-    <IoIosSearch className="text-gray-500  search w-6 h-6" />
-  </span>
-</div>
+        <div className="flex items-center cursor-pointer">
+          <input
+            type="text"
+            placeholder="Search a Book"
+            className="w-80 p-2 border border-gray-300   focus:ring focus:border-blue-300"
+          />
+          <span className="flex items-center searchbar">
+            <IoIosSearch className="text-gray-500  search w-6 h-6" />
+          </span>
+        </div>
 
         {/* Dropdown Menus */}
         <div className="flex space-x-4">
-          <div className="relative">
-            <Button name="Categories" />
+          <div>
+            <Button handleClick={'shubh'} name="Categories" />
             {/* Dropdown Content */}
-            <ul className="absolute hidden w bg-white shadow-lg mt-2 rounded-lg py-2">
+            <ul className="hidden bg-white shadow-lg mt-2 rounded-lg py-2">
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Novels</li>
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Romance</li>
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Poetry</li>
@@ -44,10 +59,10 @@ const BookStore = () => {
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Coding</li>
             </ul>
           </div>
-          <div className="relative">
-            <Button name="Type" />
+          <div>
+            <Button handleClick={'/'} name="Type" />
             {/* Dropdown Content */}
-            <ul className="absolute hidden bg-white shadow-lg mt-2 rounded-lg py-2">
+            <ul className="hidden bg-white shadow-lg mt-2 rounded-lg py-2">
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Selling</li>
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Bidding</li>
               <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Exchange</li>
@@ -90,7 +105,9 @@ const BookStore = () => {
                 </div>
 
                 {/* Buy Now Button */}
-               <Link href={"/product"}> <Button name="Buy Now" /></Link>
+              
+                  <Button  handleClick={handleBuyNow} name="Buy Now" />
+           
               </div>
             </div>
           ))}
