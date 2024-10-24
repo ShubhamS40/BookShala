@@ -6,20 +6,29 @@ import { IoIosSearch } from "react-icons/io";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation for navigation
 
+
+
 const BookStore = () => {
   const router = useRouter(); // Initialize router for navigation
-
+  
   // Function to handle the Buy Now button click
   const handleBuyNow = () => {
     const token = localStorage.getItem('token'); // Check if token exists in localStorage
-
+    
     if (token) {
       router.push('/product'); // Navigate to /product if token exists
     } else {
       alert('Please login to continue'); // Show alert if no token is present
     }
   };
-
+  
+  const bookdetail=async()=>{
+      const book_data=await fetch('api/bookdata')
+      const data=await book_data.json()
+      console.log(data);
+      
+  }
+  bookdetail()
   return (
     <div className="p-4  min-h-screen">
       {/* Header Section */}

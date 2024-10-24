@@ -11,10 +11,12 @@ CREATE TABLE "Category" (
 CREATE TABLE "Book" (
     "id" SERIAL NOT NULL,
     "imageUrl" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "description" TEXT NOT NULL,
     "author" TEXT NOT NULL,
     "categoryId" INTEGER NOT NULL,
     "Price" TEXT NOT NULL,
+    "rating" TEXT NOT NULL,
 
     CONSTRAINT "Book_pkey" PRIMARY KEY ("id")
 );

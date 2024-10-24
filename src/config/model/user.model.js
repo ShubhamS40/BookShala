@@ -12,6 +12,9 @@ const userSchema=new mongoose.Schema({
         required:true,
         unique:true
     },
+    contact:{
+        type:String
+    },
     password:{
         type:String,
         required:true
@@ -19,7 +22,9 @@ const userSchema=new mongoose.Schema({
     dob:{
         type:String,
         required:true
-    }
+    },
+    address:String,
+    
 },{timestamps:true})
 
 
