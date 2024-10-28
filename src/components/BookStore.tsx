@@ -1,36 +1,66 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from './Button'; // Import Button component
 import Chip from './Chip';
 import { IoIosSearch } from "react-icons/io";
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation for navigation
 
+// Define the structure of the book object
+interface Book {
+  name: string;
+  author: string;
+  Price: number;
+  imageUrl?: string;
+  id: number;
+  slug: string; // Added slug
+}
 
+// Function to generate a slug from the book name
+const generateSlug = (name: string) => {
+  return name.toLowerCase().replace(/ /g, '-');
+};
 
 const BookStore = () => {
   const router = useRouter(); // Initialize router for navigation
-  
+  const [books, setBooks] = useState<Book[]>([]); // State to store book data with explicit type
+
   // Function to handle the Buy Now button click
-  const handleBuyNow = () => {
+  const handleBuyNow = (slug: any) => {
     const token = localStorage.getItem('token'); // Check if token exists in localStorage
-    
     if (token) {
-      router.push('/product'); // Navigate to /product if token exists
+      router.push(`/product/${slug}`); // Navigate to /product/slug if token exists
     } else {
       alert('Please login to continue'); // Show alert if no token is present
     }
   };
-  
-  const bookdetail=async()=>{
-      const book_data=await fetch('api/bookdata')
-      const data=await book_data.json()
-      console.log(data);
-      
-  }
-  bookdetail()
+
+  const bookdetail = async () => {
+    try {
+      const response = await fetch('api/bookdata');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+      // Map the data to include slug
+      const booksWithSlug = data.data.map((book: Book) => ({
+        ...book,
+        slug: generateSlug(book.name), // Generate slug for each book
+      }));
+      setBooks(booksWithSlug); // Set the new books array with slugs
+      console.log(booksWithSlug); // To check the structure of data
+    } catch (error) {
+      console.error("Failed to fetch book data:", error);
+      setBooks([]); // Set an empty array on error to prevent the .map issue
+    }
+  };
+
+  useEffect(() => {
+    bookdetail(); // Fetch book data on component mount
+  }, []);
+
   return (
-    <div className="p-4  min-h-screen">
+    <div className="p-4 min-h-screen">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         {/* Logo and Account */}
@@ -48,10 +78,10 @@ const BookStore = () => {
           <input
             type="text"
             placeholder="Search a Book"
-            className="w-80 p-2 border border-gray-300   focus:ring focus:border-blue-300"
+            className="w-80 p-2 border border-gray-300 focus:ring focus:border-blue-300"
           />
           <span className="flex items-center searchbar">
-            <IoIosSearch className="text-gray-500  search w-6 h-6" />
+            <IoIosSearch className="text-gray-500 search w-6 h-6" />
           </span>
         </div>
 
@@ -89,37 +119,33 @@ const BookStore = () => {
 
       {/* Book List with Horizontal Cards */}
       <div className="justify-center gap-5 flex flex-wrap">
-        {Array(6)
-          .fill(null)
-          .map((_, index) => (
-            <div key={index} className="flex flex-wrap w-[30%] border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-200">
-              {/* Book Image */}
-              <img
-                src={`https://via.placeholder.com/150?text=Book+Cover+${index + 1}`}
-                alt="Book"
-                className="w-40 h-auto object-cover rounded-lg"
-              />
+        {books.map((book) => (
+          <div key={book.id} className="flex flex-wrap w-[30%] border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-200">
+            {/* Book Image */}
+            <img
+              src={book.imageUrl || `https://via.placeholder.com/150?text=Book+Cover+${book.id}`}
+              alt="Book"
+              className="w-40 h-auto object-cover rounded-lg"
+            />
 
-              {/* Book Details */}
-              <div className="ml-6 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold">Book name</h3>
-                  <p className="text-gray-500">Author name</p>
-                  <p className="text-gray-500">Price: Rs. 500</p>
-                  {/* Rating */}
-                  <div className="flex items-center mt-2">
-                    <span className="text-yellow-400">★★★★★</span>
-                    <span className="ml-2 text-gray-500">(5.0)</span>
-                  </div>
+            {/* Book Details */}
+            <div className="ml-6 flex flex-col justify-between">
+              <div>
+                <h3 className="text-xl font-semibold">{book.name || 'Book name'}</h3>
+                <p className="text-gray-500">{book.author || 'Author name'}</p>
+                <p className="text-gray-500">Price: Rs. {book.Price || 500}</p>
+                {/* Rating */}
+                <div className="flex items-center mt-2">
+                  <span className="text-yellow-400">★★★★★</span>
+                  <span className="ml-2 text-gray-500">(5.0)</span>
                 </div>
-
-                {/* Buy Now Button */}
-              
-                  <Button  handleClick={handleBuyNow} name="Buy Now" />
-           
               </div>
+
+              {/* Buy Now Button */}
+              <Button handleClick={() => handleBuyNow(book.id)} name="Buy Now" />
             </div>
-          ))}
+          </div>
+        ))}
       </div>
     </div>
   );
