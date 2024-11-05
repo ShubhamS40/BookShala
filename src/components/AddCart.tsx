@@ -1,13 +1,13 @@
 import React from 'react'
 import CustomerReview from './CustomerReview'
 
-function AddCart() {
+function AddCart({price}:any) {
   return (
     <div className='flex flex-col  justify-around p-2 items-center h-[120vh] '>
     <div className='w-[500px]  bg-white rounded-lg border-2 shadow-md p-6'>
       {/* Price */}
       <div className='text-gray-800 text-lg font-semibold'>
-        Price: <span className='font-bold'>$ 4588</span>
+        Price: <span className='font-bold'>Rs {price}</span>
       </div>
       
       <hr className='my-4' />

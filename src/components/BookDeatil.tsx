@@ -1,19 +1,37 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router'; // Import useRouter to access the route parameters
+import { useRouter } from 'next/navigation';
 
-function BookDetail() {
+interface PageProps {
+    params: {
+      slug: string;
+    };
+  }
+
+function BookDetail({ params }: PageProps) {
     const [readMore, setReadMore] = useState(false);
-    const [book, setBook] = useState(null); // State to hold the book data
-    const router = useRouter();
-    const { id } = router.query; // Get the ID from the route
+    const [book, setBook] = useState<detail | null>(null); // Type the book state with detail interface or null
+  
+    const id =  Number(params.slug)
 
+    
+
+    
+
+    interface detail {
+        name: string;
+        imageUrl: string;
+        description: string;
+    }
+    console.log(id);
+    
+   
     useEffect(() => {
         if (id) {
             // Fetch book data when ID is available
             const fetchBookData = async () => {
                 try {
-                    const response = await fetch(`/api/book/${id}`);
+                    const response = await fetch(`/api/bookdata/${id}`);
                     if (!response.ok) {
                         throw new Error('Network response was not ok');
                     }
@@ -38,7 +56,7 @@ function BookDetail() {
                 
                 {/* Title Section */}
                 <div className='w-full p-5 flex justify-between items-center'>
-                    <h1 className='text-2xl font-bold'>{book.name}</h1> {/* Book title */}
+                    <h1 className='text-2xl font-bold'>{book.name}</h1>
                 </div>
 
                 {/* Book Image Placeholder */}
@@ -49,7 +67,7 @@ function BookDetail() {
                 {/* Book Description */}
                 <div className='w-[90%] mt-4'>
                     <p className={`text-gray-700 text-sm leading-relaxed ${!readMore && 'line-clamp-4'}`}>
-                        {book.description || 'No description available.'} {/* Display book description */}
+                        {book.description || 'No description available.'}
                     </p>
                 </div>
 

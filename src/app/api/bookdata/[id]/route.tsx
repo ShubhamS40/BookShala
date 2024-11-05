@@ -1,25 +1,33 @@
-import { NextApiRequest, NextApiResponse } from 'next';
-import prisma from '../../../lib/prisma'; // Adjust this import based on your Prisma setup
+import { PrismaClient } from '@prisma/client';
+import { NextRequest, NextResponse } from 'next/server';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    const { id } = req.query; // Get the ID from the query parameters
+const prisma = new PrismaClient();
 
-    if (req.method === 'GET') {
-        try {
-            const book = await prisma.book.findUnique({
-                where: { id: Number(id) }, // Find the book by ID
-            });
+export async function GET(request: NextRequest) {
+    const url = new URL(request.url);
+    const id = url.pathname.split('/').pop(); 
+    console.log(id);
+    
 
-            if (!book) {
-                return res.status(404).json({ message: 'Book not found' });
-            }
+    if (!id) {
+        return NextResponse.json({ message: "ID is required" }, { status: 400 });
+    }
 
-            res.status(200).json(book); // Return the book data
-        } catch (error) {
-            res.status(500).json({ message: 'Error retrieving book data' });
+    try {
+        const book = await prisma.book.findUnique({
+            where: { id: parseInt(id) },
+    });
+
+        if (!book) {
+            return NextResponse.json({ message: "Book not found" }, { status: 404 });
         }
-    } else {
-        res.setHeader('Allow', ['GET']);
-        res.status(405).end(`Method ${req.method} Not Allowed`);
+
+        return NextResponse.json(book); // Return the book data
+    } catch (error: any) {
+        console.error("Error retrieving book data:", error);
+        return NextResponse.json(
+            { message: "Error retrieving book data" },
+            { status: 500 }
+        );
     }
 }
