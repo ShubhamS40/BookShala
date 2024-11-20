@@ -13,7 +13,8 @@ function BookDetail({ params }: PageProps) {
     const [book, setBook] = useState<detail | null>(null); // Type the book state with detail interface or null
   
     const id =  Number(params.slug)
-
+    
+    
     
 
     
@@ -51,7 +52,7 @@ function BookDetail({ params }: PageProps) {
     }
 
     return (
-        <div className='h-screen m-5 flex justify-center items-center'>
+        <div className='h-screen mt-5 flex justify-center items-center'>
             <div className='h-[100vh] border-2 w-full md:w-[60%] lg:w-[90%] rounded-lg flex flex-col items-center bg-white shadow-lg'>
                 
                 {/* Title Section */}

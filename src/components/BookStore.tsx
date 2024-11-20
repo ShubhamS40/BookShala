@@ -1,124 +1,111 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Button from './Button'; // Import Button component
-import Chip from './Chip';
 import { IoIosSearch } from "react-icons/io";
+import Button from './Button'; // Import Button component
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'; // Import useRouter from next/navigation for navigation
 
-// Define the structure of the book object
 interface Book {
   name: string;
   author: string;
   Price: number;
   imageUrl?: string;
   id: number;
-  slug: string; // Added slug
+  slug: string;
 }
 
-// Function to generate a slug from the book name
 const generateSlug = (name: string) => {
   return name.toLowerCase().replace(/ /g, '-');
 };
 
 const BookStore = () => {
-  const router = useRouter(); // Initialize router for navigation
-  const [books, setBooks] = useState<Book[]>([]); // State to store book data with explicit type
+  const router = useRouter();
+  const [books, setBooks] = useState<Book[]>([]);
 
-  // Function to handle the Buy Now button click
-  const handleBuyNow = (slug: any) => {
-    const token = localStorage.getItem('token'); // Check if token exists in localStorage
+  const handleBuyNow = (slug: string) => {
+    const token = localStorage.getItem('token');
     if (token) {
-      router.push(`/product/${slug}`); // Navigate to /product/slug if token exists
+      router.push(`/product/${slug}`);
     } else {
-      alert('Please login to continue'); // Show alert if no token is present
+      alert('Please login to continue');
     }
   };
 
   const bookdetail = async () => {
     try {
       const response = await fetch('api/bookdata');
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
       const data = await response.json();
-      // Map the data to include slug
       const booksWithSlug = data.data.map((book: Book) => ({
         ...book,
-        slug: generateSlug(book.name), // Generate slug for each book
+        slug: generateSlug(book.name),
       }));
-      setBooks(booksWithSlug); // Set the new books array with slugs
-      console.log(booksWithSlug); // To check the structure of data
+      setBooks(booksWithSlug);
     } catch (error) {
       console.error("Failed to fetch book data:", error);
-      setBooks([]); // Set an empty array on error to prevent the .map issue
     }
   };
 
   useEffect(() => {
-    bookdetail(); // Fetch book data on component mount
+    bookdetail();
   }, []);
 
-  return (
-    <div className="p-4 min-h-screen">
-      {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
-        {/* Logo and Account */}
-        <Link href={"/userprofile"}>
-          <div className="flex items-center space-x-4">
-            <div className="bg-gray-300 rounded-full w-10 h-10 flex items-center justify-center">
-              <span className="text-lg font-bold text-gray-600">SS</span>
-            </div>
-            <span className="text-xl font-semibold text-gray-500">My Account</span>
-          </div>
-        </Link>
+  const handleCategory = async (event: any) => {
+    const categoryName = event.currentTarget.textContent;
+    const categoryMap: { [key: string]: number } = {
+      Coding: 1,
+      Romance: 2,
+      Poetry: 3,
+      Novels: 4,
+    };
+    const categoryId = categoryMap[categoryName];
 
-        {/* Search Bar */}
-        <div className="flex items-center cursor-pointer">
+    try {
+      const response = await fetch(`api/categories`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ categoryId }),
+      });
+      if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+      const data = await response.json();
+      setBooks(data);
+    } catch (error) {
+      console.error("Failed to fetch books by category:", error);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Hero Section */}
+      <div className="bg-[#806044] text-white py-12 px-8">
+        <h1 className="text-4xl font-bold text-center mb-4">Welcome to BookShala</h1>
+        <p className="text-lg text-center">Your one-stop shop for all your book needs!</p>
+        <div className="flex justify-center items-center mt-6">
           <input
             type="text"
-            placeholder="Search a Book"
-            className="w-80 p-2 border border-gray-300 focus:ring focus:border-blue-300"
+            placeholder="Search for books, authors, or genres"
+            className="w-80 p-3 rounded-lg shadow-md border-2 border-gray-300 focus:ring focus:border-[#806044]"
           />
-          <span className="flex items-center searchbar">
-            <IoIosSearch className="text-gray-500 search w-6 h-6" />
-          </span>
-        </div>
-
-        {/* Dropdown Menus */}
-        <div className="flex space-x-4">
-          <div>
-            <Button handleClick={'shubh'} name="Categories" />
-            {/* Dropdown Content */}
-            <ul className="hidden bg-white shadow-lg mt-2 rounded-lg py-2">
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Novels</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Romance</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Poetry</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Self Help</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Coding</li>
-            </ul>
-          </div>
-          <div>
-            <Button handleClick={'/'} name="Type" />
-            {/* Dropdown Content */}
-            <ul className="hidden bg-white shadow-lg mt-2 rounded-lg py-2">
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Selling</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Bidding</li>
-              <li className="text-white border-2 border-white rounded-lg px-4 py-2 hover:bg-white hover:text-[#806044] transition duration-200 cursor-pointer">Exchange</li>
-            </ul>
-          </div>
+          <IoIosSearch className="w-8 h-8 ml-2 text-gray-800 cursor-pointer" />
         </div>
       </div>
 
       {/* Category Buttons */}
-      <div className="flex justify-around mb-6">
-        {['Novels', 'Romance', 'Poetry', 'Self Help', 'Coding'].map((category) => (
-          <Chip key={category} name={category} />
+      <div className="flex justify-center mt-8 gap-4 flex-wrap">
+        {["All", "Novels", "Coding", "Romance", "Poetry"].map((category) => (
+          <button
+            key={category}
+            onClick={category === "All" ? bookdetail : handleCategory}
+            className="px-6 py-2 bg-[#806044] text-white rounded-full hover:bg-white hover:text-[#806044] transition duration-200 shadow-lg"
+          >
+            {category}
+          </button>
         ))}
       </div>
 
-      {/* Book List with Horizontal Cards */}
-      <div className="justify-center gap-5 flex flex-wrap">
+      {/* Book Grid */}
+     {/* Book List with Horizontal Cards */}
+     <div className="justify-center gap-5 flex flex-wrap">
         {books.map((book) => (
           <div key={book.id} className="flex flex-wrap w-[30%] border p-4 rounded-lg shadow-lg bg-white hover:shadow-xl transition-shadow duration-200">
             {/* Book Image */}
