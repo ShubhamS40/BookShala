@@ -3,21 +3,30 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { useSelector } from 'react-redux';
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const [cartCount, setCartCount] = useState(0); // State for cart count
-
+  const state=useSelector(((state:any)=>state.addCart.item.length))
+  
   const navigate = useRouter();
-
   // Check for the token in localStorage when the component mounts
+
+  useEffect(()=>{
+    setCartCount(state)
+  })
+
   useEffect(() => {
     const checkLoginStatus = () => {
+
       const token = localStorage.getItem('token');
       setIsLoggedIn(!!token); // Set to true if token exists, false otherwise
     };
+    
+   
 
     // Simulate fetching cart count (replace this with actual API call if needed)
     const fetchCartCount = () => {
@@ -59,7 +68,7 @@ function Navbar() {
               
               {/* Cart Count Badge */}
               {cartCount > 0 && (
-                <div className="absolute top-0 right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+                <div className="absolute top-[-12px] right-0 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
                   {cartCount}
                 </div>
               )}

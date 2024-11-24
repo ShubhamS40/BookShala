@@ -33,6 +33,9 @@ function Page({ params }: { params: { slug: string } }) {
     return <div>Loading...</div>; // Loading state
   }
 
+  console.log("book",book);
+  
+
   return (
     <div className='flex w-auto h-[100vh]'>
       <div className='w-[50%]'>
@@ -42,7 +45,7 @@ function Page({ params }: { params: { slug: string } }) {
 
       <div className='w-[50%]'>
         {/* Pass the price to AddCart component */}
-        <AddCart price={book.Price} />
+        <AddCart price={book.Price} image={book.imageUrl} name={book.name} author={book.author} id={book.id} />
       </div>
     </div>
   );

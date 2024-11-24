@@ -1,10 +1,54 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from "react-icons/fa";
+import { AiFillCloseCircle, AiOutlineExclamationCircle } from 'react-icons/ai'; // Import error icons
 
 const ContactPage = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  // Notification states
+  const [notification, setNotification] = useState('');
+  const [showNotification, setShowNotification] = useState(false);
+  const [isError, setIsError] = useState(false);
+
+  const handleContact = async (e:any) => {
+    e.preventDefault(); // Prevent default form submission
+    try {
+      const response = await fetch("http://localhost:3000/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ name, email, message }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send message");
+      }
+
+      const result = await response.json();
+      console.log("Message sent successfully:", result);
+      setNotification('Message sent successfully!');
+      setIsError(false);
+      setName("");
+      setEmail("");
+      setMessage("");
+    } catch (error) {
+      console.error("Error:", error);
+      setNotification('Failed to send message. Please try again.');
+      setIsError(true);
+    } finally {
+      setShowNotification(true);
+      setTimeout(() => {
+        setShowNotification(false); // Hide the notification after 3 seconds
+      }, 3000);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 relative">
       {/* Header */}
       <header className="bg-[#806044] text-white py-8">
         <div className="container mx-auto text-center">
@@ -19,10 +63,12 @@ const ContactPage = () => {
           {/* Contact Form */}
           <div className="bg-white shadow-lg rounded-lg p-8">
             <h2 className="text-2xl font-bold text-gray-800 mb-4">Send Us a Message</h2>
-            <form>
+            <form onSubmit={handleContact}>
               <div className="mb-4">
                 <label htmlFor="name" className="block text-gray-700 font-medium mb-2">Your Name</label>
                 <input
+                  onChange={(e) => setName(e.target.value)}
+                  value={name}
                   type="text"
                   id="name"
                   placeholder="Enter your name"
@@ -32,6 +78,8 @@ const ContactPage = () => {
               <div className="mb-4">
                 <label htmlFor="email" className="block text-gray-700 font-medium mb-2">Your Email</label>
                 <input
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
                   type="email"
                   id="email"
                   placeholder="Enter your email"
@@ -41,6 +89,8 @@ const ContactPage = () => {
               <div className="mb-4">
                 <label htmlFor="message" className="block text-gray-700 font-medium mb-2">Your Message</label>
                 <textarea
+                  onChange={(e) => setMessage(e.target.value)}
+                  value={message}
                   id="message"
                   placeholder="Type your message here"
                   className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring focus:ring-[#806044] focus:border-[#806044]"
@@ -65,7 +115,7 @@ const ContactPage = () => {
             <div className="space-y-6">
               <div className="flex items-center">
                 <FaPhoneAlt className="text-[#806044] w-6 h-6 mr-4" />
-                <span className="text-gray-700">+91 98765 43210</span>
+                <span className="text-gray-700">+91 73032 98030</span>
               </div>
               <div className="flex items-center">
                 <FaEnvelope className="text-[#806044] w-6 h-6 mr-4" />
@@ -96,7 +146,23 @@ const ContactPage = () => {
         </div>
       </div>
 
-     
+      {/* Notification Display */}
+      {showNotification && (
+        <div className={`fixed top-4 right-4 w-96 p-4 flex items-center justify-between rounded shadow-md 
+          ${isError ? 'bg-red-100 border-l-4 border-red-500 text-red-700' : 'bg-green-100 border-l-4 border-green-500 text-green-700'}`}
+        >
+          <div className='flex items-center'>
+            {isError ? (
+              <AiOutlineExclamationCircle className='mr-2 text-xl' />
+            ) : null}
+            <span>{notification}</span>
+          </div>
+          <AiFillCloseCircle 
+            className='cursor-pointer text-2xl' 
+            onClick={() => setShowNotification(false)}
+          />
+        </div>
+      )}
     </div>
   );
 };
