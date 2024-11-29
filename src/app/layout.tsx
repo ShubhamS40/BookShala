@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import ClientProvider from "@/components/ClinetProvider"; // Correct the import name here
+import ClientProvider from "@/components/ClinetProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -49,10 +49,13 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Montaga&display=swap"
           rel="stylesheet"
         />
+        {/* Razorpay Script */}
+        <script
+          src="https://checkout.razorpay.com/v1/checkout.js"
+          async
+        ></script>
       </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <ClientProvider>
           <Navbar />
           {children}

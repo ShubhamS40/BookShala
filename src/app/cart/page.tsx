@@ -17,7 +17,7 @@ interface Book {
 
 const CartPage: React.FC = () => {
   const [lastOrderQuantities, setLastOrderQuantities] = useState<Record<number, number>>({});
-  
+
   // Fetch books data from Redux store
   const books = useSelector((state: any) => state.addCart.item);
 
@@ -31,7 +31,7 @@ const CartPage: React.FC = () => {
     0
   );
   const convenienceFee = 99;
-  const finalPrice = Number(totalMRP)  + Number(convenienceFee);
+  const finalPrice = totalMRP + convenienceFee;
 
   const handlePlaceOrder = () => {
     const quantities = books.reduce((acc: Record<number, number>, book: Book) => {
@@ -40,6 +40,61 @@ const CartPage: React.FC = () => {
     }, {});
     setLastOrderQuantities(quantities); // Save the last ordered quantities
     alert('Order placed successfully!');
+  };
+
+  const handleOrder = async () => {
+    const receipt = `receipt_${Date.now()}`; // Generate a unique receipt ID
+
+    // Making the POST request to Razorpay API
+    const response:any = await fetch("http://localhost:3000/api/razorpay", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json", // Set the content type to JSON
+      },
+      body: JSON.stringify({
+        amount: finalPrice, // Pass the final price
+        receipt,
+        productName:books.map((book:Book)=>book.name) ,// Pass the unique receipt ID
+      }),
+
+      
+    });
+
+    
+   
+
+    const data = await response.json();
+    console.log("Order response from Razorpay:", data);
+
+    
+    if (data && data.id) {
+      const options = {
+        key: process.env.RAZORPAY_KEY_ID, // Your Razorpay Key ID
+        amount: data.amount, // The amount returned from Razorpay
+        currency: "INR",
+        order_id: data.id, // Order ID returned by Razorpay
+        handler: function (response: any) {
+          // Handle payment success response
+          alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+        },
+        prefill: {
+          name: "John Doe", // Replace with dynamic user info if needed
+          email: "john@example.com", // Replace with dynamic user info if needed
+          contact: "9876543210", // Replace with dynamic user info if needed
+        },
+        notes: {
+          address: "Hello World", // Custom notes (optional)
+        },
+        theme: {
+          color: "#F37254", // Customize the color of the Razorpay checkout UI
+        },
+      };
+  
+      // Directly use Razorpay without 'new'
+      (window as any).Razorpay(options).open(); // Open the Razorpay checkout modal
+    } else {
+      alert("Error placing the order.");
+    }
   };
 
   return (
@@ -101,7 +156,7 @@ const CartPage: React.FC = () => {
           </div>
           <button
             className="w-full bg-[#806044] text-white py-3 rounded-lg font-semibold hover:bg-[#684c37] transition duration-300"
-            onClick={handlePlaceOrder}
+            onClick={handleOrder} // Use handleOrder for the order placement
           >
             PLACE ORDER
           </button>
