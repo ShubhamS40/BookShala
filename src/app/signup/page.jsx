@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import signup from '@/assets/images/signup.png';
 import Link from 'next/link';
 import { AiFillCloseCircle, AiOutlineExclamationCircle } from 'react-icons/ai'; // Import error icons
+import { CgSpinner } from 'react-icons/cg'; // Import spinner icon
 import { useRouter } from 'next/navigation';
 
 function Page() {
@@ -14,9 +15,11 @@ function Page() {
     const [message, setMessage] = useState('');
     const [showMessage, setShowMessage] = useState(false); 
     const [isError, setIsError] = useState(false); // Track if the message is an error
+    const [isLoading, setIsLoading] = useState(false); // Track loading state
     const navigate=useRouter()
     
     const handleSignup = async () => {
+      setIsLoading(true); // Start loading
       const body = JSON.stringify({ name, email, password, dob });
       
       try {
@@ -48,6 +51,7 @@ function Page() {
                 setShowMessage(false); // Hide the message after 3 seconds
                 if (!isError) resetForm(); // Reset form only if no error
             }, 3000);
+        setIsLoading(false); // End loading regardless of success/failure
         }
     };
 
@@ -161,10 +165,18 @@ function Page() {
 
                         <div className='flex flex-wrap justify-center'>
                             <button 
-                                className='pt-2 pb-2 px-4 py-4 rounded-lg font-mono text-white text-xl bg-[#806044]'
+                                className='pt-2 pb-2 px-4 py-4 rounded-lg font-mono text-white text-xl bg-[#806044] flex items-center justify-center'
                                 onClick={handleSignup}
+                                disabled={isLoading}
                             >
-                                Signup
+                                {isLoading ? (
+                                    <>
+                                        <CgSpinner className="animate-spin mr-2 h-5 w-5" />
+                                        Creating Account...
+                                    </>
+                                ) : (
+                                    'Signup'
+                                )}
                             </button>
                         </div>
                     </div>

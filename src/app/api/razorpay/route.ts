@@ -3,8 +3,8 @@ import Razorpay from "razorpay";
 
 // Initialize Razorpay instance
 const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAYID_KEY!,
-  key_secret: process.env.RAZORPAYSECERET_KEY!,
+  key_id: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_SECRET_KEY!,
 });
 
 // Define the interface for the request payload
@@ -32,10 +32,9 @@ export async function POST(request: NextRequest) {
       amount: amount * 100, // Convert INR to paise
       currency: "INR", // Razorpay requires a valid currency code
       receipt,
-      notes:[
-        productName
-      ]
-
+      notes: {
+        products: Array.isArray(productName) ? productName.join(', ') : productName
+      }
     };
 
     // Create the Razorpay order

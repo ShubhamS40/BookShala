@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import login from '@/assets/images/login.png';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { CgSpinner } from 'react-icons/cg';
 
 
 
@@ -12,9 +13,11 @@ function Page() {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [showMessage, setShowMessage] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate=useRouter()
 
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch('/api/login', {
         method: 'POST',
@@ -48,6 +51,8 @@ function Page() {
 
       // Hide message after 3 seconds
       setTimeout(() => setShowMessage(false), 3000);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -137,9 +142,17 @@ function Page() {
             <div className="flex justify-center">
               <button
                 type="submit"
-                className="w-full px-4 py-2 sm:px-6 sm:py-3 bg-[#806044] text-white font-bold rounded-lg hover:bg-[#6e5036] focus:outline-none focus:ring-2 focus:ring-[#6e5036] transition duration-300 ease-in-out"
+                disabled={isLoading}
+                className="w-full px-4 py-2 sm:px-6 sm:py-3 bg-[#806044] text-white font-bold rounded-lg hover:bg-[#6e5036] focus:outline-none focus:ring-2 focus:ring-[#6e5036] transition duration-300 ease-in-out flex items-center justify-center"
               >
-                Sign In
+                {isLoading ? (
+                  <>
+                    <CgSpinner className="animate-spin mr-2 h-5 w-5" />
+                    Signing In...
+                  </>
+                ) : (
+                  'Sign In'
+                )}
               </button>
             </div>
           </form>

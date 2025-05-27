@@ -2,7 +2,7 @@ import { log } from 'console';
 import mongoose from 'mongoose'
 
 export async function dbConnect() {
-    const url='mongodb://localhost:27017/Bookshala'
+    const url='mongodb+srv://shubham0202in:QlEc5fA785UA2OWZ@bookshalacluster.daffyzp.mongodb.net/'
     try {
         await mongoose.connect(url)
         console.log("mongodb connected sucessfully");
